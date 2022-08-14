@@ -17,7 +17,7 @@ abstract class SwipeToDeleteCallBack(context: Context): ItemTouchHelper.SimpleCa
     private val intrinsicWidth = deleteIcon?.intrinsicWidth
     private val intrinsicHeight = deleteIcon?.intrinsicHeight
     private val background = ColorDrawable()
-    private val backgroundColor = ContextCompat.getColor(context, R.color.red_400)
+    private val backgroundColor = ContextCompat.getColor(context, R.color.red_100)
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
     override fun getMovementFlags(
@@ -61,7 +61,7 @@ abstract class SwipeToDeleteCallBack(context: Context): ItemTouchHelper.SimpleCa
         }
         // Draw the red delete background
         background.color = backgroundColor
-        background.setBounds(itemView.left + dX.toInt(), itemView.top, itemView.left, itemView.bottom)
+        background.setBounds(itemView.left + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
         background.draw(c)
         // Calculate position of delete icon
         val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight!!) / 2

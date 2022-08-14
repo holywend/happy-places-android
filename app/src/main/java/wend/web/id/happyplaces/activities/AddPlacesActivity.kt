@@ -21,6 +21,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -48,9 +52,12 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private var tempImageUri: Uri? = null
     private var details: HappyPlaceEntity? = null
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
     companion object {
         private const val IMAGE_DIRECTORY = "HappyPlaceImages"
+        private const val PLACE_AUTOCOMPLETE_CODE = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +75,12 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
             onBackPressed()
         }
 
+        // check google places
+        if (!Places.isInitialized()){
+            Places.initialize(this@AddPlacesActivity, getString(R.string.google_maps_api_key))
+        }
+
+        // check if edit mode
         if (intent.hasExtra(MainActivity.HAPPY_PLACE_ENTITY)) {
             details = intent.getParcelableExtra(MainActivity.HAPPY_PLACE_ENTITY)
         }
@@ -95,6 +108,7 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
         binding.btnSave.setOnClickListener(this)
         binding.tvAddImage.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
+        binding.etLocation.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -125,6 +139,22 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
                 }.show()
             }
             R.id.btnSave -> addPlace(happyPlaceDao)
+            R.id.etLocation -> {
+                try {
+                    val fields = listOf(
+                        Place.Field.ID,
+                        Place.Field.NAME,
+                        Place.Field.LAT_LNG,
+                        Place.Field.ADDRESS
+                    )
+                    val intent = Autocomplete.IntentBuilder(
+                        AutocompleteActivityMode.FULLSCREEN, fields
+                    ).build(this@AddPlacesActivity)
+                    openPlacesLauncher.launch(intent)
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }
         }
     }
 
@@ -239,6 +269,17 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, result.data?.data)
                 binding.ivPlace.setImageURI(result.data?.data)
                 tempImageUri = saveImageToStorage(image)
+            }
+        }
+
+    // open places
+    private val openPlacesLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK && result.data != null) {
+                val place = Autocomplete.getPlaceFromIntent(result.data)
+                binding.etLocation.setText(place.address)
+                latitude = place.latLng!!.latitude
+                longitude = place.latLng!!.longitude
             }
         }
 

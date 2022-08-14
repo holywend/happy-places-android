@@ -18,7 +18,7 @@ abstract class SwipeToEditCallBack(context: Context) :
     private val intrinsicWidth = editIcon?.intrinsicWidth
     private val intrinsicHeight = editIcon?.intrinsicHeight
     private val background = ColorDrawable()
-    private val backgroundColor = ContextCompat.getColor(context, R.color.yellow_400)
+    private val backgroundColor = ContextCompat.getColor(context, R.color.yellow_100)
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
     override fun getMovementFlags(

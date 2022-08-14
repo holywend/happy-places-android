@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                                 val deleteDialog = AlertDialog.Builder(this@MainActivity)
                                 deleteDialog.setTitle("Delete")
                                 deleteDialog.setMessage("Are you sure want to delete this place?")
+                                deleteDialog.setCancelable(false)
                                 deleteDialog.setPositiveButton("Yes") { _, _ ->
                                     lifecycleScope.launch{
                                         adapter.removeAt(applicationContext,viewHolder.adapterPosition)

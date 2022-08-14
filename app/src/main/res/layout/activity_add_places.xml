@@ -84,9 +84,9 @@
                     android:id="@+id/etDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/date"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:hint="@string/date"
                     android:inputType="textCapWords"
                     android:textColor="@color/indigo_500"
                     android:textColorHint="@color/indigo_400"
@@ -106,6 +106,8 @@
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="@string/location"
                     android:inputType="textCapWords"
                     android:textColor="@color/indigo_500"
@@ -131,16 +133,16 @@
                 android:id="@+id/tvAddImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/sm_6"
+                android:gravity="center"
                 android:text="@string/add_image"
                 android:textColor="@color/indigo_300"
                 android:textSize="@dimen/text_base"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/ivPlace"
+                app:layout_constraintBottom_toTopOf="@id/btnSave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/btnSave" />
+                app:layout_constraintTop_toBottomOf="@id/ivPlace" />
 
             <Button
                 android:id="@+id/btnSave"
@@ -148,15 +150,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/sm_2"
                 android:layout_marginTop="@dimen/sm_6"
-                android:padding="@dimen/sm_4"
                 android:background="@drawable/shape_rectangle_solid_rounded"
+                android:padding="@dimen/sm_4"
                 android:text="@string/save"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_base"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAddImage"/>
+                app:layout_constraintTop_toBottomOf="@id/tvAddImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
