@@ -10,7 +10,7 @@ interface HappyPlaceDao {
     suspend fun insert(happyPlaceEntity: HappyPlaceEntity): Long
 
     @Update
-    suspend fun updateUsers(happyPlaceEntity: HappyPlaceEntity): Int
+    suspend fun update(happyPlaceEntity: HappyPlaceEntity): Int
 
     @Delete
     suspend fun delete(happyPlaceEntity: HappyPlaceEntity): Int

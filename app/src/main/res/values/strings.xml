@@ -7,5 +7,8 @@
     <string name="location">Location</string>
     <string name="add_image">ADD IMAGE</string>
     <string name="save">SAVE</string>
+    <string name="update">UPDATE</string>
     <string name="place_s_image">Place\'s image</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_maps_api_key">AIzaSyB_9Rw6kiv6i_97OTTiuWYK6S0xnUVmT_U</string>
 </resources>

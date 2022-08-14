@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.HappyPlaceDetailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbAddPlace"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/indigo_500"
+        android:theme="@style/CustomToolBarStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:title="Toolbar Title" />
+
+    <ImageView
+        android:id="@+id/ivPlaceImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_margin="@dimen/sm_4"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tbAddPlace"
+        tools:src="@drawable/ic_image_placeholder_240" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/sm_4"
+        android:gravity="center"
+        android:textColor="@color/indigo_400"
+        android:textSize="@dimen/text_base"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivPlaceImage"
+        tools:text="Description" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/sm_4"
+        android:gravity="center"
+        android:textColor="@color/indigo_400"
+        android:textSize="@dimen/text_base"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        tools:text="Description" />
+</androidx.constraintlayout.widget.ConstraintLayout>

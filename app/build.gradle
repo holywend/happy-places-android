@@ -44,6 +44,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'com.karumi:dexter:6.2.3'
+    implementation 'com.google.android.libraries.places:places:2.6.0'
 
     def roomVersion = '2.4.3'
     def activityVersion = '1.5.1'

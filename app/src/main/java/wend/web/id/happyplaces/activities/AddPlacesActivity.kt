@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -46,6 +47,7 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
     private var cal = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private var tempImageUri: Uri? = null
+    private var details: HappyPlaceEntity? = null
 
     companion object {
         private const val IMAGE_DIRECTORY = "HappyPlaceImages"
@@ -65,13 +67,30 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
         binding.tbAddPlace.setNavigationOnClickListener {
             onBackPressed()
         }
+
+        if (intent.hasExtra(MainActivity.HAPPY_PLACE_ENTITY)) {
+            details = intent.getParcelableExtra(MainActivity.HAPPY_PLACE_ENTITY)
+        }
+
         dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateDateView()
         }
-        updateDateView()
+
+        if (details == null) {
+            updateDateView()
+        } else {
+            supportActionBar?.title = "Edit Places"
+            binding.etDate.setText(details?.date)
+            binding.etTitle.setText(details?.title)
+            binding.etDescription.setText(details?.description)
+            binding.ivPlace.setImageURI(Uri.parse(details?.image))
+            tempImageUri = Uri.parse(details?.image)
+            binding.etLocation.setText(details?.location)
+            binding.btnSave.text = getString(R.string.update)
+        }
         binding.etDate.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
         binding.tvAddImage.setOnClickListener(this)
@@ -220,7 +239,6 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, result.data?.data)
                 binding.ivPlace.setImageURI(result.data?.data)
                 tempImageUri = saveImageToStorage(image)
-                Log.e("image from gallery", tempImageUri.toString())
             }
         }
 
@@ -231,7 +249,6 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
                 val image: Bitmap = result.data!!.extras!!.get("data") as Bitmap
                 binding.ivPlace.setImageBitmap(image)
                 tempImageUri = saveImageToStorage(image)
-                Log.e("image from camera", tempImageUri.toString())
             }
         }
 
@@ -253,32 +270,64 @@ class AddPlacesActivity : AppCompatActivity(), View.OnClickListener {
     private fun addPlace(happyPlaceDao: HappyPlaceDao) {
         // run on coroutine
         lifecycleScope.launch {
-            val insert = happyPlaceDao.insert(
-                HappyPlaceEntity(
-                    id = 0,
-                    title = binding.etTitle.text.toString(),
-                    image = tempImageUri.toString(),
-                    description = binding.etDescription.text.toString(),
-                    location = binding.etLocation.text.toString(),
-                    date = binding.etDate.text.toString(),
-                    latitude = 0.00,
-                    longitude = 0.00
+            if (details == null) { // if new
+                Log.e("AddPlacesActivity", "new")
+                val insert = happyPlaceDao.insert(
+                    HappyPlaceEntity(
+                        id = 0,
+                        title = binding.etTitle.text.toString(),
+                        image = tempImageUri.toString(),
+                        description = binding.etDescription.text.toString(),
+                        location = binding.etLocation.text.toString(),
+                        date = binding.etDate.text.toString(),
+                        latitude = 0.00,
+                        longitude = 0.00
+                    )
                 )
-            )
-            if (insert > 0) {
-                Toast.makeText(
-                    this@AddPlacesActivity,
-                    "Place added successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-                setResult(Activity.RESULT_OK)
-                finish()
-            } else {
-                Toast.makeText(
-                    this@AddPlacesActivity,
-                    "Place not added",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if (insert > 0) {
+                    Toast.makeText(
+                        this@AddPlacesActivity,
+                        "Place added successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@AddPlacesActivity,
+                        "Place not added",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else { // if edit
+                Log.e("Edit", "Edit")
+                val update = happyPlaceDao.update(
+                    HappyPlaceEntity(
+                        id = details?.id!!,
+                        title = binding.etTitle.text.toString(),
+                        image = tempImageUri.toString(),
+                        description = binding.etDescription.text.toString(),
+                        location = binding.etLocation.text.toString(),
+                        date = binding.etDate.text.toString(),
+                        latitude = 0.00,
+                        longitude = 0.00
+                    )
+                )
+                if (update > 0) {
+                    Toast.makeText(
+                        this@AddPlacesActivity,
+                        "Place updated successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@AddPlacesActivity,
+                        "Place not updated",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
